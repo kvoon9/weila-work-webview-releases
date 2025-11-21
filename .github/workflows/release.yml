@@ -1,0 +1,43 @@
+# .github/workflows/release.yml
+
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  repository_dispatch:
+    types: [on-demand-release]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.GH_REPO_RELEASE}}
+          repository: kvoon9/weila-work-webview
+          ref: ${{ github.event.client_payload.ref || 'main' }}
+          fetch-depth: 0
+
+      - name: Set node
+        uses: actions/setup-node@v4
+        with:
+          registry-url: https://registry.npmjs.org/
+          node-version: lts/*
+
+      - name: Install @antfu/ni
+        run: npm i -g @antfu/ni
+
+      - name: Install dependenies
+        run: nci
+
+      - name: Build package
+        run: nr build
+
+      - name: Create archive
+        run: nr archive
+      
+      - run: npx changelogithub  -t ${{ secrets.GH_REPO_RELEASE }} --release-github kvoon9/weila-work-webview-releases --assets packages/web/pkg/*.tar.gz # or changelogithub@0.12 to ensure a stable result
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_REPO_RELEASE}}
