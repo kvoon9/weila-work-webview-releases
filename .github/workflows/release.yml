@@ -12,15 +12,17 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
-          token: ${{secrets.GH_REPO_RELEASE}}
+          token: ${{ secrets.GH_REPO_RELEASE }}
           repository: kvoon9/weila-work-webview
           ref: ${{ github.event.client_payload.ref || 'main' }}
           fetch-depth: 0
 
-      - name: Set node
+      - name: Set Node.js
         uses: actions/setup-node@v4
         with:
           registry-url: https://registry.npmjs.org/
@@ -29,24 +31,56 @@ jobs:
       - name: Install @antfu/ni
         run: npm i -g @antfu/ni
 
-      - name: Install dependenies
+      - name: Install dependencies
         run: nci
 
-      - name: Build package
+      # =========================
+      # PROD BUILD & ARCHIVE
+      # =========================
+      - name: Build package (prod)
         run: nr build
+        env:
+          VITE_WL_APPID: ${{ secrets.PROD_VITE_WL_APPID }}
+          VITE_WL_APPKEY: ${{ secrets.PROD_VITE_WL_APPKEY }}
 
-      - name: Create archive
+      - name: Create archive (prod)
         run: nr archive
 
-      - name: Build package for test server
+      # =========================
+      # DEV BUILD & ARCHIVE
+      # =========================
+      - name: Build package (dev)
         run: nr build:staging
+        env:
+          VITE_WL_APPID: ${{ secrets.DEV_VITE_WL_APPID }}
+          VITE_WL_APPKEY: ${{ secrets.DEV_VITE_WL_APPKEY }}
 
-      - name: Create archive
-        run: nr archive --append test
+      - name: Create archive (dev)
+        run: nr archive --append dev
 
+      # =========================
+      # INTL BUILD & ARCHIVE
+      # =========================
+      - name: Build package (intl)
+        run: nr build:intl
+        env:
+          VITE_WL_APPID: ${{ secrets.INTL_VITE_WL_APPID }}
+          VITE_WL_APPKEY: ${{ secrets.INTL_VITE_WL_APPKEY }}
+
+      - name: Create archive (intl)
+        run: nr archive --append intl
+
+      # =========================
+      # RELEASE
+      # =========================
       - name: List files in pkg directory
         run: ls -la pkg/
-      
-      - run: npx changelogithub  -t ${{ secrets.GH_REPO_RELEASE }} --release-github kvoon9/weila-work-webview-releases --assets 'pkg/*.tar.gz'
+
+      - name: Publish GitHub Release
+        run: >
+          npx changelogithub
+          -t ${{ secrets.GH_REPO_RELEASE }}
+          --release-github kvoon9/weila-work-webview-releases
+          --assets "pkg/*.tar.gz"
         env:
-          GITHUB_TOKEN: ${{secrets.GH_REPO_RELEASE}}
+          GITHUB_TOKEN: ${{ secrets.GH_REPO_RELEASE }}
