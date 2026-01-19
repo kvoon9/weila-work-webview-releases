@@ -27,6 +27,18 @@ jobs:
         with:
           registry-url: https://registry.npmjs.org/
           node-version: lts/*
+          
+      - name: Check secrets existence
+        run: |
+          echo "PROD_VITE_WL_APPID: ${{ secrets.PROD_VITE_WL_APPID && 'SET' || 'EMPTY' }}"
+          echo "PROD_VITE_WL_APPKEY: ${{ secrets.PROD_VITE_WL_APPKEY && 'SET' || 'EMPTY' }}"
+      
+          echo "DEV_VITE_WL_APPID:  ${{ secrets.DEV_VITE_WL_APPID  && 'SET' || 'EMPTY' }}"
+          echo "DEV_VITE_WL_APPKEY:  ${{ secrets.DEV_VITE_WL_APPKEY  && 'SET' || 'EMPTY' }}"
+      
+          echo "INTL_VITE_WL_APPID: ${{ secrets.INTL_VITE_WL_APPID && 'SET' || 'EMPTY' }}"
+          echo "INTL_VITE_WL_APPKEY: ${{ secrets.INTL_VITE_WL_APPKEY && 'SET' || 'EMPTY' }}"
+
 
       - name: Install @antfu/ni
         run: npm i -g @antfu/ni
