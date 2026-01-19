@@ -30,14 +30,14 @@ jobs:
           
       - name: Check secrets existence
         run: |
-          echo "PROD_VITE_WL_APPID: ${{ secrets.PROD_VITE_WL_APPID && 'SET' || 'EMPTY' }}"
-          echo "PROD_VITE_WL_APPKEY: ${{ secrets.PROD_VITE_WL_APPKEY && 'SET' || 'EMPTY' }}"
+          echo "PROD_APP_ID:      ${{ secrets.PROD_APP_ID      && 'SET' || 'EMPTY' }}"
+          echo "PROD_APP_KEY:     ${{ secrets.PROD_APP_KEY     && 'SET' || 'EMPTY' }}"
       
-          echo "DEV_VITE_WL_APPID:  ${{ secrets.DEV_VITE_WL_APPID  && 'SET' || 'EMPTY' }}"
-          echo "DEV_VITE_WL_APPKEY:  ${{ secrets.DEV_VITE_WL_APPKEY  && 'SET' || 'EMPTY' }}"
+          echo "STAGING_APP_ID:   ${{ secrets.STAGING_APP_ID   && 'SET' || 'EMPTY' }}"
+          echo "STAGING_APP_KEY:  ${{ secrets.STAGING_APP_KEY  && 'SET' || 'EMPTY' }}"
       
-          echo "INTL_VITE_WL_APPID: ${{ secrets.INTL_VITE_WL_APPID && 'SET' || 'EMPTY' }}"
-          echo "INTL_VITE_WL_APPKEY: ${{ secrets.INTL_VITE_WL_APPKEY && 'SET' || 'EMPTY' }}"
+          echo "INTL_APP_ID:      ${{ secrets.INTL_APP_ID      && 'SET' || 'EMPTY' }}"
+          echo "INTL_APP_KEY:     ${{ secrets.INTL_APP_KEY     && 'SET' || 'EMPTY' }}"
 
 
       - name: Install @antfu/ni
