@@ -52,8 +52,8 @@ jobs:
       - name: Build package (prod)
         run: nr build
         env:
-          VITE_WL_APPID: ${{ secrets.PROD_APP_ID }}
-          VITE_WL_APPKEY: ${{ secrets.PROD_APP_KEY }}
+          VITE_APP_ID: ${{ secrets.PROD_APP_ID }}
+          VITE_APP_KEY: ${{ secrets.PROD_APP_KEY }}
 
       - name: Create archive (prod)
         run: nr archive
@@ -64,8 +64,8 @@ jobs:
       - name: Build package (dev)
         run: nr build:staging
         env:
-          VITE_WL_APPID: ${{ secrets.STAGING_APP_ID }}
-          VITE_WL_APPKEY: ${{ secrets.STAGING_APP_KEY }}
+          VITE_APP_ID: ${{ secrets.STAGING_APP_ID }}
+          VITE_APP_KEY: ${{ secrets.STAGING_APP_KEY }}
 
       - name: Create archive (dev)
         run: nr archive --append dev
@@ -76,8 +76,8 @@ jobs:
       - name: Build package (intl)
         run: nr build:intl
         env:
-          VITE_WL_APPID: ${{ secrets.INTL_APP_ID }}
-          VITE_WL_APPKEY: ${{ secrets.INTL_APP_KEY }}
+          VITE_APP_ID: ${{ secrets.INTL_APP_ID }}
+          VITE_APP_KEY: ${{ secrets.INTL_APP_KEY }}
 
       - name: Create archive (intl)
         run: nr archive --append intl
