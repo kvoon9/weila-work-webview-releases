@@ -43,6 +43,9 @@ jobs:
 
       - name: Create archive
         run: nr archive --append test
+
+      - name: List files in pkg directory
+        run: ls -la pkg/
       
       - run: npx changelogithub  -t ${{ secrets.GH_REPO_RELEASE }} --release-github kvoon9/weila-work-webview-releases --assets pkg/*.tar.gz # or changelogithub@0.12 to ensure a stable result
         env:
